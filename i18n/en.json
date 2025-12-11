@@ -1,0 +1,38 @@
+{
+    "title.parameters": "Parameters",
+    "title.app": "Nature Central Bank — Simulation",
+
+    "param.alpha": "Extraction aggressiveness (α)",
+    "param.beta": "Extraction exponent (β)",
+    "param.regen": "Natural regeneration rate (r)",
+    "param.savings": "Savings rate",
+    "param.depr": "Capital depreciation",
+    "param.years": "Simulation years",
+
+    "button.run": "Run Simulation",
+
+    "ui.language": "Language",
+
+    "brand": "Nature Central Bank — Simulation",
+    "configure_label": "Configure:",
+    "actor_label": "Actor:",
+    "language_label": "Language:",
+    "run": "Run Simulation",
+    "save": "Save",
+    "reset": "Reset",
+    "model_params": "Model parameters",
+    "actor_params": "Actor parameters",
+    "alpha": "alpha",
+    "beta": "beta",
+    "r_regen": "r (regen)",
+    "savings": "savings",
+    "depreciation": "depreciation",
+    "years": "years",
+    "N_initial": "N (initial)",
+    "K_initial": "K (initial)",
+    "T_initial": "T (initial)",
+    "N_max": "N_max",
+    "gdp_chart_title": "GDP (all actors)",
+    "n_chart_title": "Natural Capital N (all actors)",
+    "simulation_log": "Simulation Log"
+}

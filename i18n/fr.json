@@ -1,0 +1,38 @@
+{
+    "title.parameters": "Paramètres",
+    "title.app": "Banque Centrale de la Nature — Simulation",
+
+    "param.alpha": "Agressivité d'extraction (α)",
+    "param.beta": "Exposant d'extraction (β)",
+    "param.regen": "Taux de régénération naturelle (r)",
+    "param.savings": "Taux d'épargne",
+    "param.depr": "Dépréciation du capital",
+    "param.years": "Années de simulation",
+
+    "button.run": "Lancer la simulation",
+
+    "ui.language": "Langue",
+
+    "brand": "Banque Centrale de la Nature — Simulation",
+    "configure_label": "Configurer :",
+    "actor_label": "Acteur :",
+    "language_label": "Langue :",
+    "run": "Lancer la simulation",
+    "save": "Enregistrer",
+    "reset": "Réinitialiser",
+    "model_params": "Paramètres du modèle",
+    "actor_params": "Paramètres de l'acteur",
+    "alpha": "alpha",
+    "beta": "bêta",
+    "r_regen": "r (régénération)",
+    "savings": "épargne",
+    "depreciation": "dépréciation",
+    "years": "années",
+    "N_initial": "N (initial)",
+    "K_initial": "K (initial)",
+    "T_initial": "T (initial)",
+    "N_max": "N_max",
+    "gdp_chart_title": "PIB (tous les acteurs)",
+    "n_chart_title": "Capital naturel N (tous les acteurs)",
+    "simulation_log": "Journal de simulation"
+}

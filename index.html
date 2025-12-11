@@ -1,42 +1,90 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1" />
-	<title>Banque Centrale Nature — Landing</title>
-	<meta name="description" content="Mini website landing page" />
-	<style>
-		/* Minimal, easily editable styles */
-		body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; color:#111; background:#f7faf7; display:flex; min-height:100vh; align-items:center; justify-content:center; }
-		.container { max-width:900px; padding:32px; background:white; border-radius:10px; box-shadow:0 6px 30px rgba(10,20,30,0.06); }
-		header h1 { margin:0 0 8px 0; font-size:1.6rem; }
-		p.lead { margin:0 0 16px 0; color:#334; }
-		.actions { display:flex; gap:12px; margin-top:18px; }
-		button { padding:10px 14px; border-radius:8px; border:1px solid #cfd; background:#e6f4ea; cursor:pointer; }
-		footer { margin-top:20px; color:#667; font-size:0.9rem; }
-	</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nature Central Bank</title>
+    <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-	<main class="container" id="main">
-		<header>
-			<h1>Banque Centrale Nature</h1>
-			<p class="lead">A small project site. Edit index.html, assets/main.js, or README.md to update content.</p>
-		</header>
+    <header class="topbar">
+        <div class="brand" data-i18n="brand">Nature Central Bank — Simulation</div>
 
-		<section>
-			<p>Welcome — this landing page is intentionally minimal. Use the button below to try the bundled script.</p>
+        <div class="controls">
+            <label class="inline">
+                <select id="configMode">
+                    <option value="model">Model</option>
+                    <option value="actor">Actor</option>
+                </select>
+            </label>
 
-			<div class="actions">
-				<button id="action-hello" type="button" aria-live="polite">Say hello</button>
-				<button id="action-toggle" type="button">Toggle theme</button>
-			</div>
-		</section>
+            <label class="inline" id="actorSelectWrapper" style="display:none;">
+                <select id="actorSelect"></select>
+            </label>
 
-		<footer>
-			<span id="copyright">© <span id="year"></span> Banque Centrale Nature</span>
-		</footer>
-	</main>
+            <label class="inline">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                </select>
+            </label>
 
-	<script defer src="assets/main.js"></script>
+            <button id="runBtn" class="btn primary" data-i18n="run">Run Simulation</button>
+        </div>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <h3 id="configTitle" data-i18n="model_params">Model parameters</h3>
+
+            <form id="paramForm">
+                <!-- Model params -->
+                <div class="group">
+                    <label><span data-i18n="alpha">alpha</span>: <input type="number" step="0.01" id="alpha" /></label>
+                    <label><span data-i18n="beta">beta</span>: <input type="number" step="0.01" id="beta" /></label>
+                    <label><span data-i18n="r_regen">r (regen)</span>: <input type="number" step="0.001" id="r" /></label>
+                    <label><span data-i18n="savings">savings</span>: <input type="number" step="0.01" id="savings" /></label>
+                    <label><span data-i18n="depreciation">depreciation</span>: <input type="number" step="0.01" id="depreciation" /></label>
+                    <label><span data-i18n="years">years</span>: <input type="number" id="years" value="50" /></label>
+                </div>
+
+                <!-- Actor-specific params -->
+                <div class="group">
+                    <label><span data-i18n="N_initial">N (initial)</span>: <input type="number" id="N" /></label>
+                    <label><span data-i18n="K_initial">K (initial)</span>: <input type="number" id="K" /></label>
+                    <label><span data-i18n="T_initial">T (initial)</span>: <input type="number" id="T" /></label>
+                    <label><span data-i18n="N_max">N_max</span>: <input type="number" id="N_max" /></label>
+                </div>
+
+                <div class="actions">
+                    <button type="button" id="saveBtn" class="btn" data-i18n="save">Save</button>
+                    <button type="button" id="resetBtn" class="btn" data-i18n="reset">Reset</button>
+                </div>
+            </form>
+        </aside>
+
+        <main class="main">
+            <section class="charts">
+                <div class="chart-card">
+                    <h4 data-i18n="gdp_chart_title">GDP (all actors)</h4>
+                    <canvas id="gdpChart" width="800" height="300"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4 data-i18n="n_chart_title">Natural Capital N (all actors)</h4>
+                    <canvas id="nChart" width="800" height="300"></canvas>
+                </div>
+            </section>
+
+            <section class="log">
+                <details id="logDetails">
+                    <summary data-i18n="simulation_log">Simulation Log</summary>
+                    <div id="logArea" class="logArea"></div>
+                </details>
+            </section>
+        </main>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
