@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Banque Centrale Nature — Landing</title>
+	<meta name="description" content="Mini website landing page" />
+	<style>
+		/* Minimal, easily editable styles */
+		body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; color:#111; background:#f7faf7; display:flex; min-height:100vh; align-items:center; justify-content:center; }
+		.container { max-width:900px; padding:32px; background:white; border-radius:10px; box-shadow:0 6px 30px rgba(10,20,30,0.06); }
+		header h1 { margin:0 0 8px 0; font-size:1.6rem; }
+		p.lead { margin:0 0 16px 0; color:#334; }
+		.actions { display:flex; gap:12px; margin-top:18px; }
+		button { padding:10px 14px; border-radius:8px; border:1px solid #cfd; background:#e6f4ea; cursor:pointer; }
+		footer { margin-top:20px; color:#667; font-size:0.9rem; }
+	</style>
+</head>
+<body>
+	<main class="container" id="main">
+		<header>
+			<h1>Banque Centrale Nature</h1>
+			<p class="lead">A small project site. Edit index.html, assets/main.js, or README.md to update content.</p>
+		</header>
+
+		<section>
+			<p>Welcome — this landing page is intentionally minimal. Use the button below to try the bundled script.</p>
+
+			<div class="actions">
+				<button id="action-hello" type="button" aria-live="polite">Say hello</button>
+				<button id="action-toggle" type="button">Toggle theme</button>
+			</div>
+		</section>
+
+		<footer>
+			<span id="copyright">© <span id="year"></span> Banque Centrale Nature</span>
+		</footer>
+	</main>
+
+	<script defer src="assets/main.js"></script>
+</body>
+</html>
