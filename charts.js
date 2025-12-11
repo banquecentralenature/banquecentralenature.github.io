@@ -92,9 +92,7 @@ export function renderMultiCharts(histories) {
 
     ctxG.fillStyle = "#0f172a";
     ctxG.font = `${14 * devicePixelRatio}px sans-serif`;
-    ctxG.fillText("GDP", width - pad - 50 * devicePixelRatio, pad - 6 * devicePixelRatio);
 
     ctxN.fillStyle = "#0f172a";
     ctxN.font = `${14 * devicePixelRatio}px sans-serif`;
-    ctxN.fillText("Natural Capital N", width - pad - 140 * devicePixelRatio, pad - 6 * devicePixelRatio);
 }

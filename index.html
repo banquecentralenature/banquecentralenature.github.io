@@ -11,68 +11,95 @@
     <header class="topbar">
         <div class="brand" data-i18n="brand">Nature Central Bank — Simulation</div>
 
-        <div class="controls">
-            <label class="inline">
-                <select id="configMode">
-                    <option value="model">Model</option>
-                    <option value="actor">Actor</option>
-                </select>
-            </label>
+        <!-- Run simulation button (prominent) -->
+        <div class="header-actions">
+            <button id="runBtn" class="run-btn" data-i18n="run">Run simulation</button>
 
-            <label class="inline" id="actorSelectWrapper" style="display:none;">
-                <select id="actorSelect"></select>
-            </label>
-
-            <label class="inline">
-                <select id="languageSelect">
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                </select>
-            </label>
-
-            <button id="runBtn" class="btn primary" data-i18n="run">Run Simulation</button>
+            <!-- Language select moved to header -->
+            <label for="languageSelect" class="sr-only" data-i18n="language_label">Language</label>
+            <select id="languageSelect" aria-label="Language">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <!-- ...other languages... -->
+            </select>
         </div>
     </header>
 
     <div class="layout">
-        <aside class="sidebar" id="sidebar">
-            <h3 id="configTitle" data-i18n="model_params">Model parameters</h3>
+        <!-- Sidebar: configuration -->
+        <aside id="sidebar">
+            <!-- Model parameters: collapsible -->
+            <details id="modelDetails" open>
+                <summary data-i18n="model_params">Model parameters</summary>
+                <div class="config-row">
+                    <label data-i18n="alpha_label">alpha</label>
+                    <input id="alpha" type="number" step="0.01" />
+                </div>
+                <div class="config-row">
+                    <label data-i18n="beta_label">beta</label>
+                    <input id="beta" type="number" step="0.01" />
+                </div>
+                <div class="config-row">
+                    <label data-i18n="r_label">r</label>
+                    <input id="r" type="number" step="0.001" />
+                </div>
+                <div class="config-row">
+                    <label data-i18n="savings_label">savings</label>
+                    <input id="savings" type="number" step="0.01" />
+                </div>
+                <div class="config-row">
+                    <label data-i18n="depreciation_label">depreciation</label>
+                    <input id="depreciation" type="number" step="0.01" />
+                </div>
+                <div class="config-row">
+                    <label data-i18n="years_label">years</label>
+                    <input id="years" type="number" />
+                </div>
+            </details>
 
-            <form id="paramForm">
-                <!-- Model params -->
-                <div class="group">
-                    <label><span data-i18n="alpha">alpha</span>: <input type="number" step="0.01" id="alpha" /></label>
-                    <label><span data-i18n="beta">beta</span>: <input type="number" step="0.01" id="beta" /></label>
-                    <label><span data-i18n="r_regen">r (regen)</span>: <input type="number" step="0.001" id="r" /></label>
-                    <label><span data-i18n="savings">savings</span>: <input type="number" step="0.01" id="savings" /></label>
-                    <label><span data-i18n="depreciation">depreciation</span>: <input type="number" step="0.01" id="depreciation" /></label>
-                    <label><span data-i18n="years">years</span>: <input type="number" id="years" value="50" /></label>
+            <!-- Actors: collapsible (removed "Active" checkbox) -->
+            <details id="actorDetails" open>
+                <summary data-i18n="actor_params">Actor parameters</summary>
+                <div class="config-row">
+                    <label data-i18n="select_actor_label">Actor</label>
+                    <select id="actorSelect"></select>
                 </div>
 
-                <!-- Actor-specific params -->
-                <div class="group">
-                    <label><span data-i18n="N_initial">N (initial)</span>: <input type="number" id="N" /></label>
-                    <label><span data-i18n="K_initial">K (initial)</span>: <input type="number" id="K" /></label>
-                    <label><span data-i18n="T_initial">T (initial)</span>: <input type="number" id="T" /></label>
-                    <label><span data-i18n="N_max">N_max</span>: <input type="number" id="N_max" /></label>
+                <!-- Actor fields -->
+                <div class="config-row">
+                    <label data-i18n="N_label">N</label>
+                    <input id="N" type="number" step="1" />
                 </div>
+                <div class="config-row">
+                    <label data-i18n="K_label">K</label>
+                    <input id="K" type="number" step="0.1" />
+                </div>
+                <div class="config-row">
+                    <label data-i18n="T_label">T</label>
+                    <input id="T" type="number" step="0.01" />
+                </div>
+                <div class="config-row">
+                    <label data-i18n="N_max_label">N_max</label>
+                    <input id="N_max" type="number" step="1" />
+                </div>
+            </details>
 
-                <div class="actions">
-                    <button type="button" id="saveBtn" class="btn" data-i18n="save">Save</button>
-                    <button type="button" id="resetBtn" class="btn" data-i18n="reset">Reset</button>
-                </div>
-            </form>
+            <!-- Save / Reset buttons -->
+            <div class="config-actions">
+                <button id="saveBtn" data-i18n="save">Save</button>
+                <button id="resetBtn" data-i18n="reset">Reset</button>
+            </div>
         </aside>
 
         <main class="main">
-            <section class="charts">
-                <div class="chart-card">
+            <section class="charts" style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <div class="chart-card" style="flex:1 1 50%; min-width:360px;">
                     <h4 data-i18n="gdp_chart_title">GDP (all actors)</h4>
-                    <canvas id="gdpChart" width="800" height="300"></canvas>
+                    <canvas id="gdpChart" style="width:100%; height:300px;"></canvas>
                 </div>
-                <div class="chart-card">
+                <div class="chart-card" style="flex:1 1 50%; min-width:360px;">
                     <h4 data-i18n="n_chart_title">Natural Capital N (all actors)</h4>
-                    <canvas id="nChart" width="800" height="300"></canvas>
+                    <canvas id="nChart" style="width:100%; height:300px;"></canvas>
                 </div>
             </section>
 

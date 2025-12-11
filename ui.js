@@ -230,33 +230,16 @@ export function setFormValuesForActor(index, actorsParams, modelParams) {
 
 // attach config/save/reset handlers; modelParams and actorsParams are mutated directly here
 export function attachConfigHandlers(actorsParams, modelParams, { saveModel, saveActors }, i18n) {
-    const configMode = document.getElementById("configMode");
-    const actorSelectWrapper = document.getElementById("actorSelectWrapper");
+    // Sidebar-first configuration handlers
     const actorSelect = document.getElementById("actorSelect");
+    const modelInputIds = ["alpha", "beta", "r", "savings", "depreciation", "years"];
+    const actorInputIds = ["N", "K", "T", "N_max"];
 
-    if (configMode) {
-        configMode.addEventListener("change", () => {
-            const mode = configMode.value;
-            const modelText = (i18n.data && i18n.data.model_params) ? i18n.data.model_params : "Model parameters";
-            const actorText = (i18n.data && i18n.data.actor_params) ? i18n.data.actor_params : "Actor parameters";
-            const cfgTitle = document.getElementById("configTitle");
-            if (cfgTitle) cfgTitle.textContent = mode === "model" ? modelText : actorText;
-            if (actorSelectWrapper) actorSelectWrapper.style.display = mode === "actor" ? "" : "none";
-            if (mode === "model") setFormValuesForModel(modelParams, actorsParams); else setFormValuesForActor(actorSelect ? (actorSelect.selectedIndex || 0) : 0, actorsParams, modelParams);
-        });
-    }
-
-    if (actorSelect) {
-        actorSelect.addEventListener("change", () => {
-            setFormValuesForActor(actorSelect.selectedIndex, actorsParams, modelParams);
-        });
-    }
-
-    const saveBtn = document.getElementById("saveBtn");
-    if (saveBtn) {
-        saveBtn.addEventListener("click", () => {
-            const modeEl = document.getElementById("configMode");
-            const mode = modeEl ? modeEl.value : "model";
+    // persist model on blur
+    modelInputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener("blur", () => {
             const values = {
                 alpha: parseFloat(document.getElementById("alpha").value),
                 beta: parseFloat(document.getElementById("beta").value),
@@ -265,35 +248,60 @@ export function attachConfigHandlers(actorsParams, modelParams, { saveModel, sav
                 depreciation: parseFloat(document.getElementById("depreciation").value),
                 years: parseInt(document.getElementById("years").value, 10)
             };
-            if (mode === "model") {
-                Object.assign(modelParams, values);
-                saveModel(modelParams);
-                console.log("Model parameters saved.");
-            } else {
-                const idx = document.getElementById("actorSelect").selectedIndex;
-                if (idx < 0) return;
-                actorsParams[idx] = {
-                    ...actorsParams[idx],
-                    N: parseFloat(document.getElementById("N").value),
-                    K: parseFloat(document.getElementById("K").value),
-                    T: parseFloat(document.getElementById("T").value),
-                    N_max: parseFloat(document.getElementById("N_max").value)
-                };
-                saveActors(actorsParams);
-                populateActorSelect(actorsParams);
-                console.log("Actor parameters saved.");
-            }
+            Object.assign(modelParams, values);
+            saveModel(modelParams);
+            console.log("Model parameters saved (on blur).");
+        });
+    });
+
+    // actor select change -> populate fields
+    if (actorSelect) {
+        actorSelect.addEventListener("change", () => {
+            const idx = actorSelect.selectedIndex >= 0 ? actorSelect.selectedIndex : 0;
+            setFormValuesForActor(idx, actorsParams, modelParams);
         });
     }
 
+    // save actor fields on blur/change
+    actorInputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const handler = () => {
+            const idx = actorSelect ? actorSelect.selectedIndex : 0;
+            if (idx < 0 || !actorsParams[idx]) return;
+            const a = { ...actorsParams[idx] };
+            if (document.getElementById("N")) a.N = parseFloat(document.getElementById("N").value);
+            if (document.getElementById("K")) a.K = parseFloat(document.getElementById("K").value);
+            if (document.getElementById("T")) a.T = parseFloat(document.getElementById("T").value);
+            if (document.getElementById("N_max")) a.N_max = parseFloat(document.getElementById("N_max").value);
+            actorsParams[idx] = a;
+            saveActors(actorsParams);
+            populateActorSelect(actorsParams);
+            if (actorSelect) actorSelect.selectedIndex = idx;
+            console.log(`Actor ${a.name} saved.`);
+        };
+        el.addEventListener("blur", handler);
+    });
+
+    // Reset button (sidebar)
     const resetBtn = document.getElementById("resetBtn");
     if (resetBtn) {
         resetBtn.addEventListener("click", () => {
-            if (confirm("Reset model and actors to default values?")) {
+            if (confirm((i18n && i18n.data && i18n.data.reset_confirm) ? i18n.data.reset_confirm : "Reset model and actors to default values?")) {
                 localStorage.removeItem("modelParams");
                 localStorage.removeItem("actorsParams");
                 location.reload();
             }
+        });
+    }
+
+    // Save button explicit fallback
+    const saveBtn = document.getElementById("saveBtn");
+    if (saveBtn) {
+        saveBtn.addEventListener("click", () => {
+            saveModel(modelParams);
+            saveActors(actorsParams);
+            console.log("Model and actors saved (explicit).");
         });
     }
 }

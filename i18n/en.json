@@ -32,7 +32,7 @@
     "K_initial": "K (initial)",
     "T_initial": "T (initial)",
     "N_max": "N_max",
-    "gdp_chart_title": "GDP (all actors)",
-    "n_chart_title": "Natural Capital N (all actors)",
+    "gdp_chart_title": "GDP",
+    "n_chart_title": "Natural Capital",
     "simulation_log": "Simulation Log"
 }
