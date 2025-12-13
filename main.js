@@ -33,6 +33,7 @@ function buildActorsFromParams() {
     const common = {
         alpha: parseFloat(document.getElementById("alpha").value),
         beta: parseFloat(document.getElementById("beta").value),
+        gamma: parseFloat(document.getElementById("gamma").value),
         r: parseFloat(document.getElementById("r").value),
         savings: parseFloat(document.getElementById("savings").value),
         depreciation: parseFloat(document.getElementById("depreciation").value)
@@ -49,7 +50,7 @@ function buildActorsFromParams() {
 }
 
 function runAllAndRender() {
-    const years = parseInt(document.getElementById("years").value, 10) || 50;
+    const years = parseInt(document.getElementById("years").value, 10);
     const actors = buildActorsFromParams();
 
     const histories = {};
@@ -61,6 +62,11 @@ function runAllAndRender() {
     renderLog(histories);
 }
 
-// attach run button
-const runBtn = document.getElementById("runBtn");
-if (runBtn) runBtn.addEventListener("click", runAllAndRender);
+// re-run simulation on Save
+const saveBtn = document.getElementById("saveBtn");
+if (saveBtn) {
+    saveBtn.addEventListener("click", runAllAndRender);
+}
+
+// run on page load
+runAllAndRender();

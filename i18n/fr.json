@@ -4,6 +4,7 @@
 
     "param.alpha": "Agressivité d'extraction (α)",
     "param.beta": "Exposant d'extraction (β)",
+    "param.gamma": "Exposant technologique (γ)",
     "param.regen": "Taux de régénération naturelle (r)",
     "param.savings": "Taux d'épargne",
     "param.depr": "Dépréciation du capital",
@@ -24,6 +25,7 @@
     "actor_params": "Paramètres de l'acteur",
     "alpha": "alpha",
     "beta": "bêta",
+    "gamma": "gamma",
     "r_regen": "r (régénération)",
     "savings": "épargne",
     "depreciation": "dépréciation",

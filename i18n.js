@@ -1,5 +1,5 @@
 export const i18n = {
-    currentLang: "en",
+    currentLang: "fr",
     data: {},
 
     async load(lang) {
@@ -36,8 +36,6 @@ export const i18n = {
             if (this.data.language_label) controlInline[2].childNodes[0].nodeValue = this.data.language_label + " ";
         }
 
-        const runBtn = document.getElementById("runBtn");
-        if (runBtn && this.data.run) runBtn.textContent = this.data.run;
         const saveBtn = document.getElementById("saveBtn");
         if (saveBtn && this.data.save) saveBtn.textContent = this.data.save;
         const resetBtn = document.getElementById("resetBtn");
@@ -62,6 +60,5 @@ export function initI18n() {
             i18n.load(e.target.value);
         });
     }
-    // Load English by default (will silently fail if file absent)
-    i18n.load("en");
+    i18n.load("fr");
 }
