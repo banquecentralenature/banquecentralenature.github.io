@@ -1,133 +1,124 @@
-// ===============================
-// UI wiring: populate select, set form values and attach handlers for config/save/reset
-// ===============================
+// ui.js
+import { CONFIG } from "./config.js";
+import {
+  loadConfig,
+  saveConfig,
+  resolveParam
+} from "./state.js";
 
-export function populateActorSelect(actorsParams) {
-    const actorSelect = document.getElementById("actorSelect");
-    if (!actorSelect) return;
-    actorSelect.innerHTML = "";
-    actorsParams.forEach((a, i) => {
-        const opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = a.name;
-        actorSelect.appendChild(opt);
-    });
+const cfg = loadConfig();
+
+const globalContainer = document.getElementById("globalParams");
+const actorContainer = document.getElementById("actorParams");
+const actorSelect = document.getElementById("actorSelect");
+
+/* -----------------------------
+   Utilities
+------------------------------ */
+
+function paramSource(param, actor) {
+  if (actor && cfg.actors?.[actor]?.[param] !== undefined) return "actor";
+  if (cfg.global?.[param] !== undefined) return "global";
+  return "default";
 }
 
-export function setFormValuesForModel(modelParams, actorsParams) {
-    const get = id => document.getElementById(id);
-    if (get("alpha")) get("alpha").value = modelParams.alpha;
-    if (get("beta")) get("beta").value = modelParams.beta;
-    if (get("gamma")) get("gamma").value = modelParams.gamma;
-    if (get("r")) get("r").value = modelParams.r;
-    if (get("savings")) get("savings").value = modelParams.savings;
-    if (get("depreciation")) get("depreciation").value = modelParams.depreciation;
-    if (get("years")) get("years").value = modelParams.years;
+function renderRow(param, actor = null) {
+  const value = resolveParam(param, actor, cfg);
+  const source = paramSource(param, actor);
 
-    const sel = document.getElementById("actorSelect");
-    const selIndex = sel && sel.selectedIndex >= 0 ? sel.selectedIndex : 0;
-    const actor = actorsParams[selIndex];
+  const row = document.createElement("div");
+  row.className = "param-row";
+
+  const label = document.createElement("label");
+  label.textContent = param;
+
+  const input = document.createElement("input");
+  input.value = value;
+  input.className =
+    source === "actor"
+      ? "overridden"
+      : source === "global"
+      ? "inherited-global"
+      : "inherited-default";
+
+  input.addEventListener("change", () => {
+    const v = parseFloat(input.value);
     if (actor) {
-        if (get("N")) get("N").value = actor.N;
-        if (get("K")) get("K").value = actor.K;
-        if (get("T")) get("T").value = actor.T;
-        if (get("N_max")) get("N_max").value = actor.N_max;
+      cfg.actors[actor] ??= {};
+      cfg.actors[actor][param] = v;
+    } else {
+      cfg.global[param] = v;
     }
+    saveConfig(cfg);
+    refresh();
+  });
+
+  const clear = document.createElement("span");
+  clear.textContent = "↺";
+  clear.className = "clear-btn";
+  clear.title = "Clear override";
+
+  clear.addEventListener("click", () => {
+    if (actor) {
+      delete cfg.actors?.[actor]?.[param];
+    } else {
+      delete cfg.global?.[param];
+    }
+    saveConfig(cfg);
+    refresh();
+  });
+
+  row.append(label, input, clear);
+  return row;
 }
 
-export function setFormValuesForActor(index, actorsParams, modelParams) {
-    const a = actorsParams[index];
-    const get = id => document.getElementById(id);
-    if (!a) return;
-    if (get("alpha")) get("alpha").value = modelParams.alpha;
-    if (get("beta")) get("beta").value = modelParams.beta;
-    if (get("gamma")) get("gamma").value = modelParams.gamma;
-    if (get("r")) get("r").value = modelParams.r;
-    if (get("savings")) get("savings").value = modelParams.savings;
-    if (get("depreciation")) get("depreciation").value = modelParams.depreciation;
-    if (get("years")) get("years").value = modelParams.years;
+/* -----------------------------
+   Rendering
+------------------------------ */
 
-    if (get("N")) get("N").value = a.N;
-    if (get("K")) get("K").value = a.K;
-    if (get("T")) get("T").value = a.T;
-    if (get("N_max")) get("N_max").value = a.N_max;
+function renderGlobals() {
+  globalContainer.innerHTML = "";
+  CONFIG.getParamNames().forEach(p => {
+    globalContainer.appendChild(renderRow(p));
+  });
 }
 
-// attach config/save/reset handlers; modelParams and actorsParams are mutated directly here
-export function attachConfigHandlers(actorsParams, modelParams, { saveModel, saveActors }, i18n) {
-    // Sidebar-first configuration handlers
-    const actorSelect = document.getElementById("actorSelect");
-    const modelInputIds = ["alpha", "beta", "gamma", "r", "savings", "depreciation", "years"];
-    const actorInputIds = ["N", "K", "T", "N_max"];
+function renderActors() {
+  actorContainer.innerHTML = "";
+  const actor = actorSelect.value;
+  if (!actor) return;
 
-    // persist model on blur
-    modelInputIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.addEventListener("blur", () => {
-            const values = {
-                alpha: parseFloat(document.getElementById("alpha").value),
-                beta: parseFloat(document.getElementById("beta").value),
-                gamma: parseFloat(document.getElementById("gamma").value),
-                r: parseFloat(document.getElementById("r").value),
-                savings: parseFloat(document.getElementById("savings").value),
-                depreciation: parseFloat(document.getElementById("depreciation").value),
-                years: parseInt(document.getElementById("years").value, 10)
-            };
-            Object.assign(modelParams, values);
-            saveModel(modelParams);
-            console.log("Model parameters saved (on blur).");
-        });
-    });
-
-    // actor select change -> populate fields
-    if (actorSelect) {
-        actorSelect.addEventListener("change", () => {
-            const idx = actorSelect.selectedIndex >= 0 ? actorSelect.selectedIndex : 0;
-            setFormValuesForActor(idx, actorsParams, modelParams);
-        });
-    }
-
-    // save actor fields on blur/change
-    actorInputIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const handler = () => {
-            const idx = actorSelect ? actorSelect.selectedIndex : 0;
-            if (idx < 0 || !actorsParams[idx]) return;
-            const a = { ...actorsParams[idx] };
-            if (document.getElementById("N")) a.N = parseFloat(document.getElementById("N").value);
-            if (document.getElementById("K")) a.K = parseFloat(document.getElementById("K").value);
-            if (document.getElementById("T")) a.T = parseFloat(document.getElementById("T").value);
-            if (document.getElementById("N_max")) a.N_max = parseFloat(document.getElementById("N_max").value);
-            actorsParams[idx] = a;
-            saveActors(actorsParams);
-            populateActorSelect(actorsParams);
-            if (actorSelect) actorSelect.selectedIndex = idx;
-            console.log(`Actor ${a.name} saved.`);
-        };
-        el.addEventListener("blur", handler);
-    });
-
-    // Reset button (sidebar)
-    const resetBtn = document.getElementById("resetBtn");
-    if (resetBtn) {
-        resetBtn.addEventListener("click", () => {
-            if (confirm((i18n && i18n.data && i18n.data.reset_confirm) ? i18n.data.reset_confirm : "Reset model and actors to default values?")) {
-                localStorage.removeItem("modelParams");
-                localStorage.removeItem("actorsParams");
-                location.reload();
-            }
-        });
-    }
-
-    // Save button explicit fallback
-    const saveBtn = document.getElementById("saveBtn");
-    if (saveBtn) {
-        saveBtn.addEventListener("click", () => {
-            saveModel(modelParams);
-            saveActors(actorsParams);
-            console.log("Model and actors saved (explicit).");
-        });
-    }
+  CONFIG.getParamNames().forEach(p => {
+    actorContainer.appendChild(renderRow(p, actor));
+  });
 }
+
+function refresh() {
+  renderGlobals();
+  renderActors();
+}
+
+/* -----------------------------
+   Init
+------------------------------ */
+
+function initActors() {
+  actorSelect.innerHTML = "";
+  CONFIG.getActorNames().forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    actorSelect.appendChild(opt);
+  });
+  actorSelect.addEventListener("change", renderActors);
+}
+
+document.getElementById("resetAll").addEventListener("click", () => {
+  if (confirm("Reset all parameters to defaults?")) {
+    localStorage.clear();
+    location.reload();
+  }
+});
+
+initActors();
+refresh();

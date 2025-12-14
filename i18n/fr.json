@@ -21,7 +21,7 @@
     "run": "Lancer la simulation",
     "save": "Enregistrer",
     "reset": "Réinitialiser",
-    "model_params": "Paramètres du modèle",
+    "global_params": "Paramètres par défaut",
     "actor_params": "Paramètres de l'acteur",
     "alpha": "alpha",
     "beta": "bêta",

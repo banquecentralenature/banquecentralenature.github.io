@@ -22,73 +22,31 @@
     </header>
 
     <div class="layout">
-        <!-- Sidebar: configuration -->
         <aside id="sidebar">
-            <!-- Model parameters: collapsible -->
-            <details id="modelDetails" open>
-                <summary data-i18n="model_params">Model parameters</summary>
-                <div class="config-row">
-                    <label data-i18n="alpha_label">alpha</label>
-                    <input id="alpha" type="number" step="0.01" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="beta_label">beta</label>
-                    <input id="beta" type="number" step="0.01" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="gamma_label">gamma</label>
-                    <input id="gamma" type="number" step="0.01" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="r_label">r</label>
-                    <input id="r" type="number" step="0.001" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="savings_label">savings</label>
-                    <input id="savings" type="number" step="0.01" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="depreciation_label">depreciation</label>
-                    <input id="depreciation" type="number" step="0.01" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="years_label">years</label>
-                    <input id="years" type="number" />
-                </div>
-            </details>
 
-            <!-- Actors: collapsible (removed "Active" checkbox) -->
-            <details id="actorDetails" open>
-                <summary data-i18n="actor_params">Actor parameters</summary>
-                <div class="config-row">
-                    <label data-i18n="select_actor_label">Actor</label>
-                    <select id="actorSelect"></select>
-                </div>
+        <!-- GLOBAL PARAMETERS -->
+        <details open>
+            <summary data-i18n="global_params">Global parameters</summary>
+            <div id="globalParams" class="params-container"></div>
+        </details>
 
-                <!-- Actor fields -->
-                <div class="config-row">
-                    <label data-i18n="N_label">N</label>
-                    <input id="N" type="number" step="1" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="K_label">K</label>
-                    <input id="K" type="number" step="0.1" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="T_label">T</label>
-                    <input id="T" type="number" step="0.01" />
-                </div>
-                <div class="config-row">
-                    <label data-i18n="N_max_label">N_max</label>
-                    <input id="N_max" type="number" step="1" />
-                </div>
-            </details>
+        <!-- ACTOR PARAMETERS -->
+        <details open>
+            <summary data-i18n="actor_params">Actor parameters</summary>
 
-            <!-- Save / Reset buttons -->
-            <div class="config-actions">
-                <button id="saveBtn" data-i18n="save">Save</button>
-                <button id="resetBtn" data-i18n="reset">Reset</button>
+            <div class="config-row">
+            <label for="actorSelect">Actor</label>
+            <select id="actorSelect"></select>
             </div>
+
+            <div id="actorParams" class="params-container"></div>
+        </details>
+
+        <div class="config-actions">
+            <button id="saveBtn" data-i18n="save">Save</button>
+            <button id="resetAll">Reset all</button>
+        </div>
+
         </aside>
 
         <main class="main">
@@ -112,6 +70,7 @@
         </main>
     </div>
 
+    <script type="module" src="initForm.js"></script>
     <!-- Load the JS entry as an ES module so imports/exports inside main.js work -->
     <script type="module" src="main.js"></script>
 </body>

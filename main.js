@@ -1,72 +1,62 @@
-import { i18n, initI18n } from './i18n.js';
-import { Actor } from './actor.js';
-import { DEFAULT_ACTORS, loadSavedModel, loadSavedActors, saveModel, saveActors } from './persistence.js';
-import { populateActorSelect, setFormValuesForModel, attachConfigHandlers, setFormValuesForActor } from './ui.js';
-import { renderMultiCharts, renderLog } from './charts.js';
+// main.js
+import { initI18n } from "./i18n.js";
+import { CONFIG } from "./config.js";
+import { Actor } from "./actor.js";
+import {
+  loadConfig,
+  buildGlobalParams,
+  buildActorParams
+} from "./state.js";
+import "./ui.js"; // UI self-initializes and manages persistence
+import { renderMultiCharts, renderLog } from "./charts.js";
 
-// Build actor parameter store (either defaults or saved)
-let actorsParams = loadSavedActors() || DEFAULT_ACTORS.slice();
-const modelParams = loadSavedModel();
-
-// init i18n
+// -----------------------------
+// Init
+// -----------------------------
 initI18n();
 
-// DOM wiring: populate actor select, sidebar behavior, save/load
-populateActorSelect(actorsParams);
+// -----------------------------
+// Build actors from resolved config
+// -----------------------------
+function buildActorsFromConfig() {
+  const cfg = loadConfig();
+  const globalParams = buildGlobalParams(cfg);
 
-// initialize form with saved values
-setFormValuesForModel(modelParams, actorsParams);
+  return CONFIG.getActorNames().map(name => {
+    const actorParams = buildActorParams(name, cfg);
 
-// attach config/save/reset handlers
-attachConfigHandlers(actorsParams, modelParams, { saveModel, saveActors }, i18n);
-
-// actor change: ensure actor form sync (some UI code needs this exported function)
-const actorSelect = document.getElementById("actorSelect");
-if (actorSelect) {
-    actorSelect.addEventListener("change", () => {
-        setFormValuesForActor(actorSelect.selectedIndex, actorsParams, modelParams);
+    return new Actor({
+      name,
+      ...globalParams,
+      ...actorParams
     });
+  });
 }
 
-// Build actors for simulation
-function buildActorsFromParams() {
-    const common = {
-        alpha: parseFloat(document.getElementById("alpha").value),
-        beta: parseFloat(document.getElementById("beta").value),
-        gamma: parseFloat(document.getElementById("gamma").value),
-        r: parseFloat(document.getElementById("r").value),
-        savings: parseFloat(document.getElementById("savings").value),
-        depreciation: parseFloat(document.getElementById("depreciation").value)
-    };
-
-    return actorsParams.map(a => new Actor({
-        name: a.name,
-        N: parseFloat(a.N),
-        K: parseFloat(a.K),
-        T: parseFloat(a.T),
-        N_max: parseFloat(a.N_max),
-        ...common
-    }));
-}
-
+// -----------------------------
+// Run + render
+// -----------------------------
 function runAllAndRender() {
-    const years = parseInt(document.getElementById("years").value, 10);
-    const actors = buildActorsFromParams();
+  const cfg = loadConfig();
+  const globalParams = buildGlobalParams(cfg);
+  const actors = buildActorsFromConfig();
+  const years = globalParams.years;
 
-    const histories = {};
-    actors.forEach(actor => {
-        histories[actor.name] = actor.run(years);
-    });
+  const histories = {};
+  actors.forEach(actor => {
+    histories[actor.name] = actor.run(years);
+  });
 
-    renderMultiCharts(histories);
-    renderLog(histories);
+  renderMultiCharts(histories);
+  renderLog(histories);
 }
 
-// re-run simulation on Save
-const saveBtn = document.getElementById("saveBtn");
-if (saveBtn) {
-    saveBtn.addEventListener("click", runAllAndRender);
-}
+// -----------------------------
+// Re-run on explicit save
+// -----------------------------
+document
+  .getElementById("saveBtn")
+  ?.addEventListener("click", runAllAndRender);
 
-// run on page load
+// initial run
 runAllAndRender();
