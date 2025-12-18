@@ -5,15 +5,16 @@ function sigmoid(x) {
 }
 
 export class Actor {
-    constructor({ name, N, K, T, T_growth, N_max, beta, r, depreciation, emission_cap, biocoin_price, capital_constraint, eco_yield }) {
+    constructor({ name, K, T, T_growth, N_max, r, depreciation, emission_cap, biocoin_price, capital_constraint, reward_stock, reward_regen }) {
         this.name = name;
 
-        this.N = N;
+        this.N = N_max; // start at pristine state
         this.K = K;
         this.T = T;
         this.T_growth = T_growth;
         this.N_max = N_max;
         this.B = 0; // biocoins held
+        this.GDP = 0;
 
         // Extraction aggressiveness (α)
         // a3 > a1 > a2
@@ -24,7 +25,8 @@ export class Actor {
         this.a3 = 2.0;  // penalty from resource depletion
         this.alpha = this.alpha_min;
 
-        this.beta = beta;
+        // Extraction scaling exponent (β)
+        this.beta = 1.1;
 
         // Technology exponent (γ)
         // g3 > g1 > g2
@@ -49,19 +51,14 @@ export class Actor {
         this.tipping_point = 0;
 
         // Biocoins (not used until TODAY is reached)
-        this.last_year_emission = 0.0;
         this.emission_cap = emission_cap;     // max % of GDP per year
         this.burn_rate = 0.0;         // used in harsher regimes
         this.biocoin_price = biocoin_price; // exchange rate into GDP
         this.capital_constraint = capital_constraint;  // capital constraint parameter
-        this.eco_yield = eco_yield; // ecosystem yield coefficient
+        this.reward_stock = reward_stock; // biocoin reward rate for preserved ecosystems
+        this.reward_regen = reward_regen; // biocoin reward rate for regeneration
 
-        // Parasitic overlay
-        // this.emission_cap = 0.01;
-        // this.biocoin_price = 0.8;
-        // this.kappa = Infinity;
-
-        this.extraction_sensitivity = 4; // how strongly income tradeoffs affect extraction
+        this.extraction_sensitivity = 0.5; // how strongly income tradeoffs affect extraction
 
         this.history = {
             N: [],
@@ -75,20 +72,24 @@ export class Actor {
     }
 
     step(year) {
+        // Natural regeneration
+        const regen = this.r * (this.N_max - this.N);
+
         // Potential extraction (capacity)
         const E_max = this.alpha * this.T * Math.pow(this.N / this.N_max, this.beta);
 
-        // opportunity cost of extraction
-        let standing_value =
-            this.eco_yield *
-            (this.N / this.N_max) *
-            Math.pow(1 - this.N / this.N_max, 2);
-        standing_value = Math.min(standing_value, this.last_year_emission);
-
-        const extraction_value = E_max;
+        // Biocoin emissions = opportunity cost of extraction
+        const emission_cap = year >= TODAY ? this.emission_cap : 0;
+        const scarcity = 1 - (this.N / this.N_max);
+        const raw_emission = this.reward_stock * this.N + this.reward_regen * regen;
+        const scarcity_multiplier = 1 + scarcity * scarcity;
+        const emission = Math.min(
+            raw_emission * scarcity_multiplier,
+            emission_cap * this.GDP
+        );
 
         // Myopic extraction choice (no foresight)
-        const incentive_gap = extraction_value - this.biocoin_price * standing_value;
+        const incentive_gap = E_max - this.biocoin_price * emission;
         const extraction_intensity = sigmoid(this.extraction_sensitivity * incentive_gap);
 
         // Actual extraction
@@ -96,19 +97,13 @@ export class Actor {
         E = Math.min(E, this.N);
 
         // GDP from extraction economy
-        const GDP = this.T * Math.pow(this.K, this.alpha) * Math.pow(this.N, this.gamma);
-
-        // Natural regeneration
-        const regen = this.r * (this.N_max - this.N);
+        this.GDP = this.T * Math.pow(this.K, this.alpha) * Math.pow(this.N, this.gamma);
 
         // Update N
-        const prevN = this.N;
         this.N = Math.max(0, Math.min(this.N_max, this.N + regen - E));
-        const deltaN = this.N - prevN;
-        const positive_regen = Math.max(0, deltaN);
 
         // Update K from GDP
-        this.K = Math.max(0, this.K + this.savings * GDP - this.depreciation * this.K);
+        this.K = Math.max(0, this.K + this.savings * this.GDP - this.depreciation * this.K);
 
         // Update T
         this.T *= this.T_growth;
@@ -125,14 +120,14 @@ export class Actor {
 
         this.gamma = this.gamma_min + (this.gamma_max - this.gamma_min)
             * sigmoid(
-                this.g1 * Math.log(GDP + 1)
+                this.g1 * Math.log(this.GDP + 1)
                 + this.g2 * Math.log(this.K + 1)
                 - this.g3 * resource_stress
             );
 
         this.savings = this.s_min + (this.s_max - this.s_min)
             * sigmoid(
-                this.s1 * Math.log(GDP + 1)
+                this.s1 * Math.log(this.GDP + 1)
             );
 
         if (this.N < this.tipping_point * this.N_max) {
@@ -142,17 +137,6 @@ export class Actor {
 
         if (year >= TODAY) {
             // Starting today, emit biocoins (if emission_cap > 0)
-            const emission_cap = this.emission_cap
-
-            const scarcity = 1 - (this.N / this.N_max);
-            const raw_emission =
-                0.5 * positive_regen +
-                0.3 * regen;
-            const scarcity_multiplier = 1 + scarcity * scarcity;
-            const emission = Math.min(
-                raw_emission * scarcity_multiplier,
-                emission_cap * GDP
-            );
             this.B += emission;
 
             // Spend fraction of biocoins
@@ -163,20 +147,18 @@ export class Actor {
             this.K += this.biocoin_price * biocoin_spent;
 
             // Shadow ecosystem yield (only when preserved)
-            const eco_income = standing_value * (1 - extraction_intensity);
+            const eco_income = emission * (1 - extraction_intensity);
             this.K += eco_income;
 
             // Apply capital constraint (if capital_constraint < Infinity)
             this.K = Math.min(this.K, this.capital_constraint * this.B);
-
-            this.last_year_emission = emission;
         }
 
         // History
         this.history.N.push(this.N);
         this.history.K.push(this.K);
         this.history.T.push(this.T);
-        this.history.GDP.push(GDP);
+        this.history.GDP.push(this.GDP);
         this.history.E.push(E);
         this.history.B.push(this.B);
         this.history.EI.push(extraction_intensity);

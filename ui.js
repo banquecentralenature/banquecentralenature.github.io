@@ -31,6 +31,7 @@ function renderRow(param, actor = null) {
 
   const label = document.createElement("label");
   label.textContent = param;
+  label.dataset.i18n = `params.${param.toLowerCase()}`;
 
   const input = document.createElement("input");
   input.value = value;

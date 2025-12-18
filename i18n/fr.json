@@ -2,34 +2,27 @@
     "title.parameters": "Paramètres",
     "title.app": "Banque Centrale de la Nature — Simulation",
 
-    "param.beta": "Exposant d'extraction (β)",
-    "param.regen": "Taux de régénération naturelle (r)",
-    "param.depr": "Dépréciation du capital",
-    "param.years": "Années de simulation",
-
-    "button.run": "Lancer la simulation",
+    "button.save": "Lancer la simulation",
+    "button.reset": "Réinitialiser tout",
 
     "ui.language": "Langue",
 
-    "brand": "Banque Centrale de la Nature — Simulation",
-    "configure_label": "Configurer :",
-    "actor_label": "Acteur :",
-    "language_label": "Langue :",
-    "run": "Lancer la simulation",
-    "save": "Enregistrer",
-    "reset": "Réinitialiser",
-    "global_params": "Paramètres par défaut",
+    "global_params": "Paramètres globaux",
     "actor_params": "Paramètres de l'acteur",
-    "beta": "bêta",
-    "r_regen": "r (régénération)",
-    "depreciation": "dépréciation",
-    "years": "années",
-    "N_initial": "N (initial)",
-    "K_initial": "K (initial)",
-    "T_initial": "T (initial)",
-    "N_max": "N_max",
-    "gdp_chart_title": "PIB",
-    "n_chart_title": "Capital naturel",
+
+    "params.r": "Taux de régénération naturelle (r)",
+    "params.depreciation": "Dépréciation du capital",
+    "params.years": "Années de simulation",
+    "params.biocoin_price": "Prix du biocoin",
+    "params.capital_constraint": "Contrainte de capital (ratio éco/biocoin maximal)",
+    "params.emission_cap": "Plafond d'émission de biocoin (% du PIB)",
+    "params.reward_stock": "Taux de récompense en biocoin pour les écosystèmes préservés",
+    "params.reward_regen": "Taux de récompense en biocoin pour la régénération",
+    "params.n_max": "Capital naturel maximal (N)",
+    "params.k": "Niveau de capital (K)",
+    "params.t": "Niveau technologique (T)",
+    "params.t_growth": "Croissance technologique annuelle",
+
     "simulation_log": "Détails des simulation",
 
     "charts.n": "Capital Naturel (N)",
@@ -38,5 +31,5 @@
     "charts.t": "Niveau Technologique (T)",
     "charts.e": "Extraction (E)",
     "charts.b": "Biocoins détenus (B)",
-    "charts.ei": "Intensité d'Extraction (EI)"
+    "charts.ei": "Intensité d'Extraction (1=Extraction maximale, 0=Aucune extraction)"
 }

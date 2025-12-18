@@ -2,34 +2,26 @@
     "title.parameters": "Parameters",
     "title.app": "Nature Central Bank — Simulation",
 
-    "param.beta": "Extraction exponent (β)",
-    "param.regen": "Natural regeneration rate (r)",
-    "param.depr": "Capital depreciation",
-    "param.years": "Simulation years",
-
     "button.run": "Run Simulation",
 
     "ui.language": "Language",
 
-    "brand": "Nature Central Bank — Simulation",
-    "configure_label": "Configure:",
-    "actor_label": "Actor:",
-    "language_label": "Language:",
-    "run": "Run Simulation",
-    "save": "Save",
-    "reset": "Reset",
-    "global_params": "Default parameters",
-    "actor_params": "Actor parameters",
-    "beta": "beta",
-    "r_regen": "r (regen)",
-    "depreciation": "depreciation",
-    "years": "years",
-    "N_initial": "N (initial)",
-    "K_initial": "K (initial)",
-    "T_initial": "T (initial)",
-    "N_max": "N_max",
-    "gdp_chart_title": "GDP",
-    "n_chart_title": "Natural Capital",
+    "global_params": "Global Parameters",
+    "actor_params": "Actor Parameters",
+
+    "params.r": "Natural regeneration rate (r)",
+    "params.depreciation": "Capital depreciation",
+    "params.years": "Simulation years",
+    "params.biocoin_price": "Biocoin price",
+    "params.capital_constraint": "Capital constraint (max eco/biocoin ratio)",
+    "params.emission_cap": "Biocoin emission cap (% of GDP)",
+    "params.reward_stock": "Biocoin reward rate for preserved ecosystems",
+    "params.reward_regen": "Biocoin reward rate for regeneration",
+    "params.n_max": "Maximum natural capital (N)",
+    "params.k": "Capital level (K)",
+    "params.t": "Technology level (T)",
+    "params.t_growth": "Annual technological growth",
+
     "simulation_log": "Simulation Log",
 
     "charts.n": "Natural Capital (N)",
@@ -38,5 +30,5 @@
     "charts.t": "Technology Level (T)",
     "charts.e": "Extraction (E)",
     "charts.b": "Biocoins Held (B)",
-    "charts.ei": "Extraction Intensity (EI)"
+    "charts.ei": "Extraction Intensity (1=Maximal extraction, 0=No extraction)"
 }
