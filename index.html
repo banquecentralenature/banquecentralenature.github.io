@@ -50,15 +50,9 @@
         </aside>
 
         <main class="main">
-            <section class="charts" style="display:flex; gap:1rem; flex-wrap:wrap;">
-                <div class="chart-card" style="flex:1 1 50%; min-width:360px;">
-                    <h4 data-i18n="gdp_chart_title">GDP (all actors)</h4>
-                    <canvas id="gdpChart" style="width:100%; height:300px;"></canvas>
-                </div>
-                <div class="chart-card" style="flex:1 1 50%; min-width:360px;">
-                    <h4 data-i18n="n_chart_title">Natural Capital N (all actors)</h4>
-                    <canvas id="nChart" style="width:100%; height:300px;"></canvas>
-                </div>
+            <section id="chartsSection" class="charts" style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <!-- Replaced static canvases with a single container that JS will populate -->
+                <div id="chartsContainer" style="display:flex; gap:1rem; flex-wrap:wrap; width:100%"></div>
             </section>
 
             <section class="log">

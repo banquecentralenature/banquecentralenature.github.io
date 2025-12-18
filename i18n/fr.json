@@ -2,11 +2,8 @@
     "title.parameters": "Paramètres",
     "title.app": "Banque Centrale de la Nature — Simulation",
 
-    "param.alpha": "Agressivité d'extraction (α)",
     "param.beta": "Exposant d'extraction (β)",
-    "param.gamma": "Exposant technologique (γ)",
     "param.regen": "Taux de régénération naturelle (r)",
-    "param.savings": "Taux d'épargne",
     "param.depr": "Dépréciation du capital",
     "param.years": "Années de simulation",
 
@@ -23,11 +20,8 @@
     "reset": "Réinitialiser",
     "global_params": "Paramètres par défaut",
     "actor_params": "Paramètres de l'acteur",
-    "alpha": "alpha",
     "beta": "bêta",
-    "gamma": "gamma",
     "r_regen": "r (régénération)",
-    "savings": "épargne",
     "depreciation": "dépréciation",
     "years": "années",
     "N_initial": "N (initial)",
@@ -36,5 +30,13 @@
     "N_max": "N_max",
     "gdp_chart_title": "PIB",
     "n_chart_title": "Capital naturel",
-    "simulation_log": "Détails des simulation"
+    "simulation_log": "Détails des simulation",
+
+    "charts.n": "Capital Naturel (N)",
+    "charts.gdp": "Produit Intérieur Brut (PIB)",
+    "charts.k": "Niveau de Capital (K)",
+    "charts.t": "Niveau Technologique (T)",
+    "charts.e": "Extraction (E)",
+    "charts.b": "Biocoins détenus (B)",
+    "charts.ei": "Intensité d'Extraction (EI)"
 }

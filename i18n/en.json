@@ -2,11 +2,8 @@
     "title.parameters": "Parameters",
     "title.app": "Nature Central Bank — Simulation",
 
-    "param.alpha": "Extraction aggressiveness (α)",
     "param.beta": "Extraction exponent (β)",
-    "param.gamma": "Technology exponent (γ)",
     "param.regen": "Natural regeneration rate (r)",
-    "param.savings": "Savings rate",
     "param.depr": "Capital depreciation",
     "param.years": "Simulation years",
 
@@ -23,11 +20,8 @@
     "reset": "Reset",
     "global_params": "Default parameters",
     "actor_params": "Actor parameters",
-    "alpha": "alpha",
     "beta": "beta",
-    "gamma": "gamma",
     "r_regen": "r (regen)",
-    "savings": "savings",
     "depreciation": "depreciation",
     "years": "years",
     "N_initial": "N (initial)",
@@ -36,5 +30,13 @@
     "N_max": "N_max",
     "gdp_chart_title": "GDP",
     "n_chart_title": "Natural Capital",
-    "simulation_log": "Simulation Log"
+    "simulation_log": "Simulation Log",
+
+    "charts.n": "Natural Capital (N)",
+    "charts.gdp": "Gross Domestic Product (GDP)",
+    "charts.k": "Capital Level (K)",
+    "charts.t": "Technology Level (T)",
+    "charts.e": "Extraction (E)",
+    "charts.b": "Biocoins Held (B)",
+    "charts.ei": "Extraction Intensity (EI)"
 }

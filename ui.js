@@ -78,9 +78,11 @@ function renderRow(param, actor = null) {
 
 function renderGlobals() {
   globalContainer.innerHTML = "";
-  CONFIG.getParamNames().forEach(p => {
-    globalContainer.appendChild(renderRow(p));
-  });
+  CONFIG.getParamNames()
+    .filter(p => CONFIG.params[p].default != undefined)
+    .forEach(p => {
+        globalContainer.appendChild(renderRow(p));
+    });
 }
 
 function renderActors() {
@@ -88,9 +90,11 @@ function renderActors() {
   const actor = actorSelect.value;
   if (!actor) return;
 
-  CONFIG.getParamNames().forEach(p => {
-    actorContainer.appendChild(renderRow(p, actor));
-  });
+  CONFIG.getParamNames()
+    .filter(p => CONFIG.params[p].overridable != false)
+    .forEach(p => {
+        actorContainer.appendChild(renderRow(p, actor));
+    });
 }
 
 function refresh() {
