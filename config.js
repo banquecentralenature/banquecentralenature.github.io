@@ -13,10 +13,10 @@ export const CONFIG = {
     T_growth: {},
     N_max: {},
     emission_cap: { default: 0.02 }, // max % of GDP per year
-    biocoin_price: { default: 8.0 }, // biocoin to capital conversion rate
+    regencoin_price: { default: 2.0 }, // regencoin to capital conversion rate
     capital_constraint: { default: Infinity }, // capital constraint parameter
-    reward_stock: { default: 0.02 }, // biocoin reward rate for preserved ecosystems
-    reward_regen: { default: 1 } // biocoin reward rate for regeneration
+    reward_stock: { default: 0.02 }, // regencoin reward rate for preserved ecosystems
+    reward_regen: { default: 1 } // regencoin reward rate for regeneration
   },
 
   // Some params were calibrated to match today's N/N_max values 

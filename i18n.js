@@ -61,4 +61,5 @@ export function initI18n() {
         });
     }
     i18n.load("fr");
+    return i18n;
 }

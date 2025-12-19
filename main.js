@@ -13,7 +13,7 @@ import { renderMultiCharts, renderLog } from "./charts.js";
 // -----------------------------
 // Init
 // -----------------------------
-initI18n();
+const i18n = initI18n();
 
 // -----------------------------
 // Build actors from resolved config
@@ -49,6 +49,7 @@ function runAllAndRender() {
 
   renderMultiCharts(histories);
   renderLog(histories);
+  i18n.apply();
 }
 
 // -----------------------------

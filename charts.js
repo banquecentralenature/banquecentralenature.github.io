@@ -9,7 +9,7 @@ export function renderLog(allHistories) {
         const parts = [];
         for (const name in allHistories) {
             const h = allHistories[name];
-            parts.push(`${name}: N=${h.N[i].toFixed(1)} K=${h.K[i].toFixed(1)} GDP=${h.GDP[i].toFixed(1) } T=${h.T[i].toFixed(2)} E=${h.E[i].toFixed(3)} B=${h.B[i].toFixed(2)} EI=${h.EI[i].toFixed(3)}`);
+            parts.push(`${name}: N=${h.N[i].toFixed(1)} K=${h.K[i].toFixed(1)} GDP=${h.GDP[i].toFixed(1) } T=${h.T[i].toFixed(2)} E=${h.E[i].toFixed(3)} R=${h.R[i].toFixed(2)} EI=${h.EI[i].toFixed(3)}`);
         }
         line.textContent = `Year ${i}: ` + parts.join(" | ");
         log.appendChild(line);
@@ -19,7 +19,7 @@ export function renderLog(allHistories) {
     if (details) details.open = false;
 }
 
-export function renderMultiCharts(histories, keys = ["GDP", "N", "K", "T", "E", "B", "EI"]) {
+export function renderMultiCharts(histories, keys = ["GDP", "N", "K", "T", "E", "R", "EI"]) {
     // Try to find dynamic container; if absent, fall back to old static canvases (backwards compatibility)
     const container = document.getElementById("chartsContainer");
     const DPR = window.devicePixelRatio || 1;
