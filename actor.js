@@ -5,7 +5,7 @@ function sigmoid(x) {
 }
 
 export class Actor {
-    constructor({ name, K, T, T_growth, N_max, r, depreciation, emission_cap, regencoin_price, capital_constraint, reward_stock, reward_regen }) {
+    constructor({ name, K, T, T_growth, N_max, r, depreciation, emission_cap, regencoin_price, capital_constraint, reward_stock, reward_regen, tipping_point, technology_impact }) {
         this.name = name;
 
         this.N = N_max; // start at pristine state
@@ -48,7 +48,9 @@ export class Actor {
         this.depreciation = depreciation;
 
         // Value of N/N_max below which K and T start to decline
-        this.tipping_point = 0;
+        this.tipping_point = tipping_point;
+        this.technology_impact = technology_impact; // fractional T loss when below tipping point
+        this.capital_impact = technology_impact;    // fractional K loss when below tipping point
 
         // Regencoins (not used until TODAY is reached)
         this.emission_cap = emission_cap;     // max % of GDP per year
@@ -135,8 +137,8 @@ export class Actor {
             );
 
         if (this.N < this.tipping_point * this.N_max) {
-            this.T *= 0.95; // innovation slows
-            this.K *= 0.95; // capital losses
+            this.T *= this.technology_impact; // innovation slows
+            this.K *= this.capital_impact; // capital losses
         }
 
         if (year >= TODAY) {

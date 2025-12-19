@@ -17,6 +17,8 @@
     "params.emission_cap": "Regencoin emission cap (% of GDP)",
     "params.reward_stock": "Regencoin reward rate for preserved ecosystems",
     "params.reward_regen": "Regencoin reward rate for regeneration",
+    "params.tipping_point": "Tipping point (N/N_max) below which K and T start to decline",
+    "params.technology_impact": "Technology impact (fractional T loss when N/N_max < tipping point)",
     "params.n_max": "Maximum natural capital (N)",
     "params.k": "Capital level (K)",
     "params.t": "Technology level (T)",

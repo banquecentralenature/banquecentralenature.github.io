@@ -18,6 +18,8 @@
     "params.emission_cap": "Plafond d'émission de regencoin (% du PIB)",
     "params.reward_stock": "Taux de récompense en regencoin pour les écosystèmes préservés",
     "params.reward_regen": "Taux de récompense en regencoin pour la régénération",
+    "params.tipping_point": "Point critique (N/N_max) en dessous duquel K et T commencent à décliner",
+    "params.technology_impact": "Impact technologique (fraction de T perdue quand N/N_max < point critique)",
     "params.n_max": "Capital naturel maximal (N)",
     "params.k": "Niveau de capital (K)",
     "params.t": "Niveau technologique (T)",

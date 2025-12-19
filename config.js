@@ -16,7 +16,9 @@ export const CONFIG = {
     regencoin_price: { default: 2.0 }, // regencoin to capital conversion rate
     capital_constraint: { default: Infinity }, // capital constraint parameter
     reward_stock: { default: 0.02 }, // regencoin reward rate for preserved ecosystems
-    reward_regen: { default: 1 } // regencoin reward rate for regeneration
+    reward_regen: { default: 1 }, // regencoin reward rate for regeneration
+    tipping_point: { default: 0 }, // value of N/N_max below which K and T start to decline
+    technology_impact: { default: 0.95 }, // fractional T loss when below tipping point
   },
 
   // Some params were calibrated to match today's N/N_max values 
